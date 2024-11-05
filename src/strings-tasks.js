@@ -20,6 +20,10 @@
  *   getStringLength(undefined) => 0
  */
 function getStringLength(value) {
+  if (value === null || typeof value !== 'string') {
+    return 0;
+  }
+
   return value.length;
 }
 
@@ -38,6 +42,10 @@ function getStringLength(value) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
+  if (value === false) {
+    return true;
+  }
+
   return typeof value === 'string';
 }
 
@@ -131,6 +139,10 @@ function removeTrailingWhitespaces(value) {
  *   repeatString('abc', -2) => ''
  */
 function repeatString(str, times) {
+  if (times <= 0) {
+    return '';
+  }
+
   return str.repeat(times);
 }
 
@@ -148,7 +160,10 @@ function repeatString(str, times) {
  */
 function removeFirstOccurrences(str, value) {
   const indexOfFirst = str.indexOf(value);
-  return str.slice(indexOfFirst, indexOfFirst + value.length);
+  if (indexOfFirst === -1) {
+    return str;
+  }
+  return str.slice(0, indexOfFirst) + str.slice(indexOfFirst + value.length);
 }
 
 /**
@@ -164,9 +179,11 @@ function removeFirstOccurrences(str, value) {
  *   removeLastOccurrences('ABABAB', 'BA') => 'ABAB'.
  */
 function removeLastOccurrences(str, value) {
-  const newIndexOfFirst = str.indexOf(value);
-  const indexOfSecond = str.indexOf(newIndexOfFirst + 1);
-  return str.slice(indexOfSecond, indexOfSecond + value.length);
+  const indexOfLast = str.lastIndexOf(value);
+  if (indexOfLast === -1) {
+    return str;
+  }
+  return str.slice(0, indexOfLast) + str.slice(indexOfLast + value.length);
 }
 
 /**
@@ -182,7 +199,15 @@ function removeLastOccurrences(str, value) {
  *   sumOfCodes() => 0
  */
 function sumOfCodes(str) {
-  return str.charCodeAt();
+  if (str === undefined) {
+    return 0;
+  }
+  let result = 0;
+  const s = str.split('');
+  for (let i = 0; i < s.length; i += 1) {
+    result += s[i].charCodeAt(0);
+  }
+  return result;
 }
 
 /**
@@ -228,8 +253,10 @@ function endsWith(str, substr) {
  *   formatTime(0, 45) => "00:45"
  *   formatTime(0, 0) => "00:00"
  */
-function formatTime(/* minutes, seconds */) {
-  throw new Error('Not implemented');
+function formatTime(minutes, seconds) {
+  const formattedMinutes = String(minutes).padStart(2, '0');
+  const formattedSeconds = String(seconds).padStart(2, '0');
+  return `${formattedMinutes}:${formattedSeconds}`;
 }
 
 /**
@@ -338,8 +365,10 @@ function isPalindrome(/* str */) {
  *   findLongestWord('A long and winding road') => 'winding'
  *   findLongestWord('No words here') => 'words'
  */
-function findLongestWord(/* sentence */) {
-  throw new Error('Not implemented');
+function findLongestWord(sentence) {
+  return sentence
+    .split(' ')
+    .reduce((longest, word) => Math.max(longest, word.length), 0);
 }
 
 /**
@@ -353,7 +382,10 @@ function findLongestWord(/* sentence */) {
  *   reverseWords('The Quick Brown Fox') => 'ehT kciuQ nworB xoF'
  */
 function reverseWords(str) {
-  return str.split('').reverse().join('');
+  return str
+    .split(' ')
+    .map((word) => word.split('').reverse().join(''))
+    .join(' ');
 }
 
 /**
@@ -385,7 +417,7 @@ function invertCase(/* str */) {
  *   getStringFromTemplate('Chuck','Norris') => 'Hello, Chuck Norris!'
  */
 function getStringFromTemplate(firstName, lastName) {
-  return `Hello ${firstName} ${lastName}!`;
+  return `Hello, ${firstName} ${lastName}!`;
 }
 
 /**
@@ -399,7 +431,7 @@ function getStringFromTemplate(firstName, lastName) {
  *   extractNameFromTemplate('Hello, Chuck Norris!') => 'Chuck Norris'
  */
 function extractNameFromTemplate(value) {
-  return value.slice(6, value.length - 1);
+  return value.slice(7, value.length - 1);
 }
 
 /**
@@ -414,7 +446,7 @@ function extractNameFromTemplate(value) {
  *   unbracketTag('<a>') => 'a'
  */
 function unbracketTag(str) {
-  return str.slice(0, str.length - 1);
+  return str.slice(1, str.length - 1);
 }
 
 /**
